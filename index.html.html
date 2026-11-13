@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من سيربح المليون - اليوم الوطني السعودي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Tajawal & Cairo for crisp Arabic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles & Typography */
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background: radial-gradient(circle at top center, #064e3b 0%, #022c22 45%, #020617 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Animated Background Particles / Rays */
+        .bg-rays {
+            background: repeating-conic-gradient(
+                from 0deg at 50% 50%,
+                rgba(16, 185, 129, 0.04) 0deg 15deg,
+                transparent 15deg 30deg
+            );
+            animation: spinSlow 60s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.28);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(16, 185, 129, 0.12);
+        }
+
+        /* 3D Millionaire Style Option Buttons */
+        .option-btn {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #d97706;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: linear-gradient(180deg, #065f46 0%, #064e3b 100%);
+            border-color: #fbbf24;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.35);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+            border-color: #fef08a;
+            color: #fff;
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(180deg, #10b981 0%, #047857 100%) !important;
+            border-color: #a7f3d0 !important;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.8) !important;
+            animation: pulseSuccess 0.8s ease-in-out;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%) !important;
+            border-color: #fecaca !important;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.8) !important;
+        }
+
+        /* Animations */
+        @keyframes pulseSuccess {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .shake-anim {
+            animation: shakeError 0.45s ease-in-out;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .float-logo {
+            animation: floatLogo 3.5s ease-in-out infinite;
+        }
+
+        /* Prize Ladder Active Item */
+        .ladder-item.active {
+            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.35), transparent);
+            border-right: 4px solid #fbbf24;
+            border-left: 4px solid #fbbf24;
+            color: #fef08a;
+            font-weight: 800;
+            transform: scale(1.04);
+        }
+
+        .ladder-item.passed {
+            color: #34d399;
+        }
+
+        /* Fireworks Canvas */
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Print Styles for Certificate */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-certificate, #printable-certificate * { visibility: visible; }
+            #printable-certificate {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: #022c22 !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                border: 8px double #fbbf24 !important;
+                padding: 40px !important;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between relative">
+
+    <!-- Background Rotating Light Rays -->
+    <div class="fixed inset-0 bg-rays pointer-events-none z-0"></div>
+
+    <!-- Fireworks Canvas Overlay -->
+    <canvas id="fireworks-canvas"></canvas>
+
+    <!-- Top Header Bar -->
+    <header class="relative z-10 w-full py-3 px-4 md:px-8 border-b border-amber-500/20 bg-slate-950/60 backdrop-blur-md flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+            <!-- Custom SVG Emblem for Saudi National Day & Millionaire -->
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-emerald-800 to-amber-500 p-0.5 shadow-lg flex items-center justify-center">
+                <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center text-amber-400">
+                    <i class="fa-solid fa-trophy text-lg"></i>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-lg md:text-xl font-black text-amber-400 tracking-wide">من سيربح المليون</h1>
+                <p class="text-xs text-emerald-300">اليوم الوطني السعودي | المهارات الإدارية</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <span class="hidden sm:inline-flex items-center gap-1.5 text-xs bg-emerald-900/70 border border-emerald-500/30 text-emerald-200 px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-graduation-cap text-amber-400"></i>
+                الصف: ثالث ثانوي (16-18 سنة)
+            </span>
+            <button id="sound-toggle-btn" onclick="toggleSound()" class="p-2.5 rounded-full bg-slate-800/80 hover:bg-slate-700 border border-amber-500/30 text-amber-400 transition" title="كتم / تشغيل الصوت">
+                <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="relative z-10 flex-grow flex items-center justify-center p-4 md:p-6">
+
+        <!-- ==================== 1. START SCREEN ==================== -->
+        <section id="start-screen" class="glass-panel w-full max-w-2xl rounded-3xl p-6 md:p-10 text-center space-y-6 transition-all duration-500">
+            <!-- Activity Logo Emblem -->
+            <div class="float-logo mx-auto w-28 h-28 md:w-32 md:h-32 rounded-full bg-gradient-to-b from-amber-400 via-emerald-600 to-emerald-950 p-1 shadow-[0_0_40px_rgba(16,185,129,0.5)]">
+                <div class="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center border-2 border-amber-300/50 relative overflow-hidden">
+                    <span class="text-[10px] font-bold text-emerald-400 tracking-wider">عِزُّنا بِطَبْعِنا</span>
+                    <i class="fa-solid fa-award text-4xl text-amber-400 my-1"></i>
+                    <span class="text-[11px] font-black text-white bg-emerald-800/80 px-2 py-0.5 rounded-full">المليون التعليمي</span>
+                </div>
+            </div>
+
+            <!-- Main & Sub Headings -->
+            <div class="space-y-2">
+                <h2 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-emerald-400">
+                    تحدي المهارات الإدارية
+                </h2>
+                <p class="text-slate-300 text-sm md:text-base max-w-lg mx-auto">
+                    اختبر حصيلتك الإدارية والمعرفية في مسابقة تنافسية مستوحاة من برنامج "من سيربح المليون" بمناسبة اليوم الوطني السعودي!
+                </p>
+            </div>
+
+            <!-- Metadata Badges -->
+            <div class="flex flex-wrap justify-center gap-2 text-xs">
+                <span class="bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-lg text-amber-300"><i class="fa-solid fa-book-open ml-1"></i> المادة: المهارات الإدارية</span>
+                <span class="bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-lg text-emerald-300"><i class="fa-solid fa-list-ol ml-1"></i> عدد الأسئلة: 8 أسئلة</span>
+                <span class="bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-lg text-sky-300"><i class="fa-solid fa-flag ml-1"></i> اليوم الوطني السعودي</span>
+            </div>
+
+            <!-- Student Name Input & Difficulty Selector -->
+            <div class="space-y-4 max-w-md mx-auto text-right bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                <div>
+                    <label for="student-name" class="block text-sm font-bold text-amber-300 mb-1.5">
+                        <i class="fa-solid fa-user-graduate ml-1"></i> اسم الطالب / المتسابق:
+                    </label>
+                    <input type="text" id="student-name" placeholder="أدخل اسمك الثلاثي هنا..." class="w-full px-4 py-3 rounded-xl bg-slate-950 border border-amber-500/40 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 transition">
+                    <p id="name-error" class="text-red-400 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation ml-1"></i> يرجى كتابة اسمك للبدء في التحدي.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-amber-300 mb-1.5">
+                        <i class="fa-solid fa-gauge-high ml-1"></i> اختر مستوى الصعوبة (الزمن المتاح):
+                    </label>
+                    <div class="grid grid-cols-3 gap-2" id="difficulty-selector">
+                        <button type="button" data-diff="easy" onclick="selectDifficulty('easy')" class="diff-btn py-2.5 px-2 rounded-xl border border-slate-700 bg-slate-950 text-xs font-bold text-slate-300 hover:border-emerald-400 transition">
+                            سهل (45 ث)
+                        </button>
+                        <button type="button" data-diff="medium" onclick="selectDifficulty('medium')" class="diff-btn py-2.5 px-2 rounded-xl border-2 border-amber-400 bg-emerald-950/60 text-xs font-bold text-amber-300 transition">
+                            متوسط (30 ث)
+                        </button>
+                        <button type="button" data-diff="hard" onclick="selectDifficulty('hard')" class="diff-btn py-2.5 px-2 rounded-xl border border-slate-700 bg-slate-950 text-xs font-bold text-slate-300 hover:border-red-400 transition">
+                            صعب (20 ث)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Challenge Button -->
+            <button onclick="startGame()" class="w-full max-w-md mx-auto py-4 px-8 rounded-2xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-lg md:text-xl shadow-[0_10px_30px_rgba(245,158,11,0.4)] hover:shadow-[0_15px_35px_rgba(245,158,11,0.6)] transform hover:-translate-y-1 transition-all flex items-center justify-center gap-3">
+                <span>ابدأ التحدي الآن</span>
+                <i class="fa-solid fa-play"></i>
+            </button>
+        </section>
+
+        <!-- ==================== 2. GAMEPLAY SCREEN ==================== -->
+        <section id="game-screen" class="hidden w-full max-w-6xl grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+
+            <!-- Main Question & Options Area (3 cols on large screens) -->
+            <div class="lg:col-span-3 glass-panel rounded-3xl p-5 md:p-8 space-y-6">
+
+                <!-- Top Game Status Bar -->
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-700/70 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-500/20 border border-amber-400/50 text-amber-300 font-black px-4 py-1.5 rounded-full text-sm">
+                            السؤال <span id="q-current">1</span> من <span id="q-total">8</span>
+                        </span>
+                        <span class="text-xs text-slate-300 hidden sm:inline">
+                            المتسابق: <strong id="display-player-name" class="text-emerald-400"></strong>
+                        </span>
+                    </div>
+
+                    <!-- Countdown Timer Circle -->
+                    <div class="flex items-center gap-3">
+                        <div class="text-left">
+                            <span class="text-[11px] text-slate-400 block">الوقت المتبقي</span>
+                            <span id="timer-text" class="text-lg font-black text-amber-400">30 ثانية</span>
+                        </div>
+                        <div id="timer-badge" class="w-12 h-12 rounded-full border-4 border-amber-400 bg-slate-900 flex items-center justify-center font-black text-lg text-white shadow-inner">
+                            30
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement Progress Bar -->
+                <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                    <div id="progress-bar" class="bg-gradient-to-l from-amber-400 to-emerald-500 h-full transition-all duration-500" style="width: 12.5%"></div>
+                </div>
+
+                <!-- Lifelines (وسائل المساعدة) -->
+                <div class="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+                    <button id="life-5050" onclick="useFiftyFifty()" class="lifeline-btn flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900 border border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-300 transition shadow-md" title="حذف إجابتين خاطئتين">
+                        <i class="fa-solid fa-scissors text-emerald-400"></i>
+                        <span>حذف إجابتين (50:50)</span>
+                    </button>
+
+                    <button id="life-hint" onclick="useHint()" class="lifeline-btn flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900 border border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-300 transition shadow-md" title="تلميح تعليمي">
+                        <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+                        <span>تلميح</span>
+                    </button>
+
+                    <button id="life-audience" onclick="useAudience()" class="lifeline-btn flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900 border border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-300 transition shadow-md" title="تصويت الجمهور">
+                        <i class="fa-solid fa-users text-sky-400"></i>
+                        <span>اسأل الجمهور</span>
+                    </button>
+
+                    <button id="life-teacher" onclick="useTeacher()" class="lifeline-btn flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900 border border-amber-500/50 hover:border-amber-400 text-xs font-bold text-amber-300 transition shadow-md" title="استشارة المعلم">
+                        <i class="fa-solid fa-chalkboard-user text-purple-400"></i>
+                        <span>اسأل المعلم</span>
+                    </button>
+                </div>
+
+                <!-- Dynamic Lifeline Helper Box (Hidden until used) -->
+                <div id="lifeline-box" class="hidden bg-emerald-950/80 border border-emerald-400/50 rounded-2xl p-4 text-sm text-emerald-100 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span id="lifeline-title" class="font-bold text-amber-300 flex items-center gap-2"></span>
+                        <button onclick="document.getElementById('lifeline-box').classList.add('hidden')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div id="lifeline-content" class="text-xs md:text-sm leading-relaxed"></div>
+                </div>
+
+                <!-- Question Box -->
+                <div id="question-container" class="bg-gradient-to-b from-slate-900/95 to-slate-950/95 border-2 border-amber-500/60 rounded-2xl p-6 md:p-8 text-center shadow-[0_0_30px_rgba(251,191,36,0.12)] relative">
+                    <span class="absolute -top-3 right-6 bg-emerald-700 text-white text-[11px] font-bold px-3 py-0.5 rounded-full border border-emerald-400">
+                        <i class="fa-solid fa-briefcase ml-1"></i> <span id="q-category">المهارات الإدارية</span>
+                    </span>
+                    <h3 id="question-text" class="text-lg md:text-2xl font-bold text-white leading-relaxed">
+                        جاري تحميل السؤال...
+                    </h3>
+                </div>
+
+                <!-- 4 Options Grid -->
+                <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Buttons injected by JS -->
+                </div>
+
+                <!-- Post-Answer Educational Feedback Modal/Box -->
+                <div id="feedback-box" class="hidden rounded-2xl p-5 md:p-6 border-2 space-y-3 transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <h4 id="feedback-status" class="text-lg md:text-xl font-black flex items-center gap-2"></h4>
+                        <span id="feedback-points" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-900/80"></span>
+                    </div>
+                    <p id="feedback-reason" class="text-sm text-slate-200 leading-relaxed"></p>
+                    <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-700/70 text-xs text-amber-200 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-info text-amber-400 text-base mt-0.5"></i>
+                        <div>
+                            <strong class="block text-amber-400 mb-0.5">إثراء ومعلومة إضافية:</strong>
+                            <span id="feedback-extra" class="text-slate-300 leading-relaxed"></span>
+                        </div>
+                    </div>
+                    <div class="pt-2 flex justify-end gap-3">
+                        <button id="retry-q-btn" onclick="retryCurrentQuestion()" class="hidden px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-400/50 text-amber-300 font-bold text-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> إعادة المحاولة
+                        </button>
+                        <button id="next-q-btn" onclick="nextQuestion()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-sm shadow-lg transition flex items-center gap-2">
+                            <span>السؤال التالي</span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Prize Points Ladder (1 col) -->
+            <div class="glass-panel p-4 rounded-2xl flex flex-col justify-between space-y-2">
+                <div class="text-center border-b border-amber-500/30 pb-2">
+                    <h4 class="text-xs font-black text-amber-400 uppercase tracking-wider">سُلَّم النقاط والإنجاز</h4>
+                    <p class="text-[10px] text-slate-400">اليوم الوطني</p>
+                </div>
+                <ul id="prize-ladder" class="space-y-1.5 text-xs md:text-sm py-1">
+                    <!-- Ladder items injected in reverse (8 down to 1) -->
+                </ul>
+            </div>
+
+        </section>
+
+        <!-- ==================== 3. END & CERTIFICATE SCREEN ==================== -->
+        <section id="end-screen" class="hidden glass-panel w-full max-w-3xl rounded-3xl p-6 md:p-10 text-center space-y-6">
+
+            <!-- Medal / Trophy Header -->
+            <div class="mx-auto w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 p-1 shadow-[0_0_40px_rgba(251,191,36,0.6)]">
+                <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center">
+                    <i id="end-medal-icon" class="fa-solid fa-trophy text-4xl text-amber-400"></i>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <h2 id="end-title" class="text-2xl md:text-4xl font-black text-amber-400">تهانينا بالفوز المستحق!</h2>
+                <p id="end-subtitle" class="text-slate-300 text-sm">لقد أنهيت مسابقة المهارات الإدارية بمناسبة اليوم الوطني بنجاح</p>
+            </div>
+
+            <!-- Score Summary Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 block">اسم الطالب</span>
+                    <strong id="res-name" class="text-sm text-white font-bold truncate block mt-1">-</strong>
+                </div>
+                <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 block">الإجابات الصحيحة</span>
+                    <strong id="res-score" class="text-lg text-emerald-400 font-black block mt-0.5">0 / 8</strong>
+                </div>
+                <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 block">النسبة المئوية</span>
+                    <strong id="res-percent" class="text-lg text-amber-400 font-black block mt-0.5">0%</strong>
+                </div>
+                <div class="bg-slate-900/80 border border-slate-700 p-3 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 block">المستوى والرصيد</span>
+                    <strong id="res-prize" class="text-sm text-sky-400 font-black block mt-1">0 نقطة</strong>
+                </div>
+            </div>
+
+            <!-- Printable Certificate Preview Box -->
+            <div id="printable-certificate" class="bg-slate-900/90 p-6 rounded-2xl border-2 border-amber-500/40 text-center space-y-4 relative">
+                <div class="flex justify-between items-center border-b border-amber-500/20 pb-3">
+                    <div class="text-right">
+                        <h4 class="text-xs font-bold text-emerald-400">المملكة العربية السعودية - وزارة التعليم</h4>
+                        <p class="text-[10px] text-slate-400">نشاط اليوم الوطني السعودي (1448 هـ)</p>
+                    </div>
+                    <i class="fa-solid fa-crown text-2xl text-amber-400"></i>
+                </div>
+
+                <div class="space-y-2 py-2">
+                    <span class="inline-block bg-emerald-900/70 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">شهادة شكر وتفوق</span>
+                    <p class="text-xs text-slate-300">تُمنح هذه الشهادة للطالب المبدع:</p>
+                    <h3 id="cert-student-name" class="text-xl md:text-2xl font-black text-amber-300 underline decoration-emerald-500 underline-offset-8">اسم الطالب</h3>
+                    <p class="text-xs md:text-sm text-slate-300 max-w-md mx-auto pt-2 leading-relaxed">
+                        وذلك لتميزه في مسابقة <strong class="text-white">«من سيربح المليون»</strong> في مادة <strong class="text-emerald-400">المهارات الإدارية</strong> للصف الثالث الثانوي، محققاً وسام <strong id="cert-badge-name" class="text-amber-400">قائد المستقبل</strong> بنسبة إنجاز <strong id="cert-percent">100%</strong>.
+                    </p>
+                </div>
+
+                <div class="flex justify-between items-end pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+                    <div class="text-right">
+                        <span class="block text-slate-500">إعداد وتطوير المعلمة:</span>
+                        <strong class="text-amber-300">سميرة الخيبري</strong>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-emerald-400 font-bold">عِزُّنا بِطَبْعِنا 🇸🇦</span>
+                        <span>1448 هـ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2 no-print">
+                <button onclick="restartGame()" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold text-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> إعادة النشاط
+                </button>
+                <button onclick="window.print()" class="px-5 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-sm shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> طباعة النتيجة
+                </button>
+                <button onclick="downloadCertificate()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-sm shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> تحميل شهادة الإنجاز
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="relative z-10 w-full bg-slate-950/80 border-t border-amber-500/20 py-4 px-4 md:px-8 text-xs text-slate-400 no-print">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
+            <div class="flex items-center gap-3">
+                <!-- Developer Avatar & Emblem -->
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-600 to-amber-400 p-0.5">
+                    <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-amber-300 font-bold">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-white font-bold">إعداد وتطوير: <span class="text-amber-400">سميرة الخيبري</span></p>
+                    <p class="text-[11px] text-slate-400">المهارات الإدارية - الصف الثالث الثانوي</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>شعار الهوية: عِزُّنا بِطَبْعِنا</span>
+            </div>
+
+            <div>
+                حقوق النشر © <span class="text-amber-300 font-bold">سميرة الخيبري</span> - 1448 هـ
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // 1. Educational Questions Dataset (8 Questions: Management Skills + Saudi National Day)
+        const questionsData = [
+            {
+                category: "التخطيط الاستراتيجي",
+                question: "تُعد «رؤية المملكة 2030» خارطة طريق شاملة لمستقبل الوطن. في علم الإدارة، يُصنَّف وضع الأهداف بعيدة المدى وتحديد مسارات تحقيقها ضمن وظيفة:",
+                options: ["التخطيط الاستراتيجي", "الرقابة المالية", "التوظيف التشغيلي", "التفويض الإداري"],
+                correct: 0,
+                prize: "1,000 ريال",
+                hint: "هي الوظيفة الإدارية الأولى التي تسبق التنفيذ وتحدد الوجهة المستقبلية.",
+                reason: "التخطيط الاستراتيجي هو العملية الإدارية المعنية برسم الرؤية المستقبلية وتحديد الأهداف الكبرى والسياسات اللازمة لتحقيقها على المدى الطويل، وهو ما تجسده رؤية 2030.",
+                extra: "يرتكز التخطيط الاستراتيجي في رؤية 2030 على ثلاثة محاور رئيسية: مجتمع حيوي، اقتصاد مزدهر، ووطن طموح."
+            },
+            {
+                category: "إدارة التراث والمشاريع",
+                question: "في نشاط «عِزُّنا في أصالتنا» لدراسة المواقع الأثرية السعودية، تم توزيع الطلاب إلى أدوار محددة (متحدث، كاتب، مصمم، باحث، ضابط وقت). يُعرف هذا المفهوم إدارياً بـ:",
+                options: ["المركزية المطلقة", "تقسيم العمل وتحديد المسؤوليات", "الرقابة اللاحقة", "تضارب الاختصاصات"],
+                correct: 1,
+                prize: "5,000 ريال",
+                hint: "مبدأ إداري يضمن عدم تداخل المهام ويزيد من كفاءة الفريق.",
+                reason: "تقسيم العمل وتحديد المسؤوليات (التنظيم) يضمن وضوح دور كل فرد في الفريق، مما يمنع الازدواجية ويرفع جودة الإنجاز الجماعي.",
+                extra: "يُعد عالم الإدارة هنري فايول من أوائل من أكدوا على مبدأ تقسيم العمل بوصفه ركيزة أساسية لرفع الكفاءة الإنتاجية."
+            },
+            {
+                category: "القيادة والأصالة التاريخية",
+                question: "أسس الإمام محمد بن سعود الدولة السعودية الأولى وجعل الدرعية عاصمة لها، كما بُنيت «سبالة موضي» كأول وقف خيري لإكرام عابري السبيل. أي نمط قيادي يعكس هذا العطاء والمسؤولية المجتمعية؟",
+                options: ["القيادة الخادمة والمُلهمة", "القيادة البيروقراطية الجامدة", "القيادة المتساهلة", "القيادة الفردية المنعزلة"],
+                correct: 0,
+                prize: "10,000 ريال",
+                hint: "قيادة تضع خدمة المجتمع ورعاية أفراده في مقدمة أولوياتها.",
+                reason: "القيادة الخادمة والمُلهمة تركز على تلبية احتياجات المجتمع، وترسيخ قيم التكافل والبر، وبناء مؤسسات مستدامة تخدم الناس.",
+                extra: "تُعد «سبالة موضي» في حي الطريف بالدرعية نموذجاً تاريخياً رائداً للوقف الخيري المؤسسي في الجزيرة العربية."
+            },
+            {
+                category: "إدارة الأولويات والتوازن",
+                question: "ضمن إستراتيجية الألعاب والرياضات الإلكترونية في رؤية 2030، يطمح الشباب للاستثمار في هذا القطاع مع الحفاظ على دراستهم وصحتهم. أي أداة إدارية تساعدهم على الموازنة بين الشغف ومجالات الحياة؟",
+                options: ["مصفوفة إدارة الأولويات وعجلة التوازن", "الإدارة بالأزمات", "التفويض العشوائي", "الرقابة العقابية"],
+                correct: 0,
+                prize: "50,000 ريال",
+                hint: "تساعدك على ترتيب المهام حسب الأهمية والاستعجال وتوزيع وقتك بعدالة.",
+                reason: "إدارة الأولويات وعجلة التوازن تُمكِّن الفرد من استثمار الفرص الواعدة دون الإخلال بواجباته الدراسية والاجتماعية والصحية.",
+                extra: "تستهدف الإستراتيجية الوطنية للألعاب والرياضات الإلكترونية جعل المملكة مركزاً عالمياً لهذا القطاع وتوفير آلاف الوظائف النوعية بحلول 2030."
+            },
+            {
+                category: "جودة الخدمات والضيافة",
+                question: "يهدف «برنامج خدمة ضيوف الرحمن» إلى الارتقاء بتجربة الحجاج والمعتمرين قبل وأثناء وبعد زيارتهم. في الإدارة الحديثة، يُسمى التركيز على إرضاء المستفيد وتحسين تجربته باستمرار بـ:",
+                options: ["إدارة الجودة الشاملة (TQM)", "تقليص النفقات التشغيلية", "الإدارة التقليدية", "التسويق المؤقت"],
+                correct: 0,
+                prize: "125,000 ريال",
+                hint: "منهج إداري يهدف إلى التحسين المستمر وتقديم أفضل خدمة تفوق توقعات المستفيد.",
+                reason: "إدارة الجودة الشاملة تعني تكامل جميع الجهود والعمليات لتقديم خدمات متميزة تحقق رضا المستفيد الكامل في كل مراحل رحلته.",
+                extra: "يُعد برنامج خدمة ضيوف الرحمن أحد البرامج التنفيذية الكبرى لرؤية السعودية 2030 لتيسير استضافة ملايين المعتمرين والحجاج."
+            },
+            {
+                category: "الاتصال الإداري والهوية",
+                question: "تعكس آداب «القهوة السعودية» (تقديمها باليمين، الانتباه للضيف، وحسن الترحيب) مهارة إدارية واجتماعية جوهرية في بيئة العمل والقيادة، وهي:",
+                options: ["الاتصال الفعّال والذكاء الاجتماعي", "التفاوض التنافسي الحاد", "الاتصال الرسمي المكتوب فقط", "العزلة التنظيمية"],
+                correct: 0,
+                prize: "250,000 ريال",
+                hint: "مهارة بناء العلاقات الإيجابية وفهم احتياجات الآخرين والتواصل الراقي معهم.",
+                reason: "الاتصال الفعّال والذكاء الاجتماعي يجمعان بين لغة الجسد الإيجابية، المبادرة، واللباقة اللفظية، مما يعزز بناء الثقة في العلاقات المهنية والاجتماعية.",
+                extra: "أُدرجت «القهوة السعودية» بوصفها عنصراً ثقافياً أصيلاً يعبر عن الكرم وحسن الضيافة في الثقافة السعودية."
+            },
+            {
+                category: "اتخاذ القرار والمواطنة الرقمية",
+                question: "عند تعرضك لخبر مجهول المصدر عبر وسائل التواصل الاجتماعي، فإن الخطوة الإدارية الصحيحة لاتخاذ قرار سليم تجاهه هي:",
+                options: ["جمع المعلومات والتحقق من المصادر الرسمية قبل النشر", "إعادة نشره فوراً لتحذير الآخرين", "اتخاذ قرار عاطفي سريع", "تجاهل القوانين الرقمية"],
+                correct: 0,
+                prize: "500,000 ريال",
+                hint: "أولى خطوات اتخاذ القرار العلمي هي التشخيص وجمع البيانات الموثوقة.",
+                reason: "اتخاذ القرار الرشيد يتطلب جمع البيانات الدقيقة والتحقق من موثوقية المصدر لمنع انتشار الشائعات وحماية الأمن الفكري والرقمي للوطن.",
+                extra: "المواطنة الرقمية تعني الاستخدام الآمن والأخلاقي والمسؤول للتقنية، وتمثيل الوطن بصورة مشرفة في الفضاء الرقمي."
+            },
+            {
+                category: "الابتكار والتنافسية العالمية",
+                question: "فوز طلاب المملكة بميداليات عالمية في «أولمبياد العلوم النووية» يبرهن على نجاح الاستثمار في «رأس المال البشري». ما المقصود برأس المال البشري في الإدارة الحديثة؟",
+                options: ["المعارف والمهارات والقدرات الإبداعية للأفراد", "المباني والأجهزة والمعدات المادية", "السيولة النقدية في البنوك فقط", "الموارد الطبيعية غير المتجددة"],
+                correct: 0,
+                prize: "1,000,000 ريال",
+                hint: "هو أغلى ما تملكه الأمم؛ عقول أبنائها ومهاراتهم العلمية.",
+                reason: "رأس المال البشري هو مخزون المعرفة والمهارات والابتكار لدى الأفراد، ويُعد المحرك الحقيقي للتنمية المستدامة والتنافسية العالمية.",
+                extra: "أطلق سمو ولي العهد «برنامج تنمية القدرات البشرية» لتعزيز تنافسية المواطن السعودي محلياً وعالمياً."
+            }
+        ];
+
+        // 2. Game State Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let studentName = "";
+        let difficulty = "medium";
+        let timePerQuestion = 30;
+        let timeLeft = 30;
+        let timerInterval = null;
+        let isAnswered = false;
+        let soundEnabled = true;
+
+        // Lifelines State
+        let lifelines = {
+            fiftyFifty: true,
+            hint: true,
+            audience: true,
+            teacher: true,
+            retryAvailable: true
+        };
+
+        // 3. Web Audio API Synthesizer (No External Sound URLs Required!)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTone(freq, type, duration, delay = 0, vol = 0.15) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration);
+            } catch (e) { /* Ignore audio errors if blocked */ }
+        }
+
+        function playIntroMusic() {
+            // Dramatic Millionaire-style chord arpeggio
+            const notes = [261.63, 329.63, 392.00, 523.25, 659.25];
+            notes.forEach((n, i) => playTone(n, 'triangle', 0.6, i * 0.12, 0.18));
+        }
+
+        function playCorrectSound() {
+            playTone(523.25, 'sine', 0.25, 0, 0.2);
+            playTone(659.25, 'sine', 0.25, 0.12, 0.2);
+            playTone(783.99, 'triangle', 0.5, 0.24, 0.25);
+        }
+
+        function playWrongSound() {
+            playTone(220, 'sawtooth', 0.35, 0, 0.18);
+            playTone(185, 'sawtooth', 0.5, 0.2, 0.2);
+        }
+
+        function playTickSound() {
+            playTone(880, 'sine', 0.06, 0, 0.05);
+        }
+
+        function playWinFanfare() {
+            const melody = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+            melody.forEach((n, i) => playTone(n, 'triangle', 0.45, i * 0.15, 0.22));
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            icon.className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark text-red-400';
+        }
+
+        // 4. Difficulty Selection
+        function selectDifficulty(level) {
+            difficulty = level;
+            const buttons = document.querySelectorAll('.diff-btn');
+            buttons.forEach(btn => {
+                btn.className = "diff-btn py-2.5 px-2 rounded-xl border border-slate-700 bg-slate-950 text-xs font-bold text-slate-300 hover:border-emerald-400 transition";
+            });
+            const activeBtn = document.querySelector(`[data-diff="${level}"]`);
+            activeBtn.className = "diff-btn py-2.5 px-2 rounded-xl border-2 border-amber-400 bg-emerald-950/60 text-xs font-bold text-amber-300 transition";
+
+            if (level === 'easy') timePerQuestion = 45;
+            else if (level === 'medium') timePerQuestion = 30;
+            else timePerQuestion = 20;
+        }
+
+        // 5. Start Game Flow
+        function startGame() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            const errorMsg = document.getElementById('name-error');
+
+            if (!nameInput) {
+                errorMsg.classList.remove('hidden');
+                document.getElementById('student-name').classList.add('shake-anim');
+                setTimeout(() => document.getElementById('student-name').classList.remove('shake-anim'), 500);
+                return;
+            }
+            errorMsg.classList.add('hidden');
+            studentName = nameInput;
+
+            // Reset State
+            currentQuestionIndex = 0;
+            score = 0;
+            lifelines = { fiftyFifty: true, hint: true, audience: true, teacher: true, retryAvailable: true };
+
+            // Reset Lifeline Buttons UI
+            document.querySelectorAll('.lifeline-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-40', 'line-through', 'cursor-not-allowed');
+            });
+
+            // Switch Screens
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('display-player-name').textContent = studentName;
+
+            playIntroMusic();
+            renderPrizeLadder();
+            loadQuestion();
+        }
+
+        // 6. Render Prize Ladder
+        function renderPrizeLadder() {
+            const ladderEl = document.getElementById('prize-ladder');
+            ladderEl.innerHTML = '';
+            for (let i = questionsData.length - 1; i >= 0; i--) {
+                const li = document.createElement('li');
+                let statusClass = 'text-slate-400';
+                if (i === currentQuestionIndex) statusClass = 'active rounded-lg px-2 py-1';
+                else if (i < currentQuestionIndex) statusClass = 'passed px-2 py-1';
+                else statusClass = 'px-2 py-1';
+
+                li.className = `ladder-item flex justify-between items-center transition-all ${statusClass}`;
+                li.innerHTML = `
+                    <span class="font-bold">${i + 1}</span>
+                    <span>${questionsData[i].prize}</span>
+                `;
+                ladderEl.appendChild(li);
+            }
+        }
+
+        // 7. Load Current Question
+        function loadQuestion() {
+            isAnswered = false;
+            const q = questionsData[currentQuestionIndex];
+
+            // Update Counters & Progress
+            document.getElementById('q-current').textContent = currentQuestionIndex + 1;
+            document.getElementById('q-total').textContent = questionsData.length;
+            document.getElementById('q-category').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+
+            const progressPercent = ((currentQuestionIndex + 1) / questionsData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Hide Feedback & Lifeline Boxes
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('lifeline-box').classList.add('hidden');
+
+            // Render 4 Options
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
+            const letters = ['أ', 'ب', 'ج', 'د'];
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `opt-btn-${idx}`;
+                btn.onclick = () => checkAnswer(idx);
+                btn.className = 'option-btn w-full p-4 rounded-2xl text-right flex items-center gap-3 text-sm md:text-base font-bold text-white';
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-400 text-amber-300 flex items-center justify-center font-black shrink-0">${letters[idx]}</span>
+                    <span class="flex-grow">${optText}</span>
+                `;
+                optionsGrid.appendChild(btn);
+            });
+
+            renderPrizeLadder();
+            startTimer();
+        }
+
+        // 8. Countdown Timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = timePerQuestion;
+            updateTimerUI();
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerUI();
+                if (timeLeft <= 5 && timeLeft > 0) {
+                    playTickSound();
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeOut();
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timer-text').textContent = `${timeLeft} ثانية`;
+            const badge = document.getElementById('timer-badge');
+            badge.textContent = timeLeft;
+
+            if (timeLeft <= 7) {
+                badge.className = "w-12 h-12 rounded-full border-4 border-red-500 bg-red-950 flex items-center justify-center font-black text-lg text-red-300 animate-pulse";
+            } else {
+                badge.className = "w-12 h-12 rounded-full border-4 border-amber-400 bg-slate-900 flex items-center justify-center font-black text-lg text-white shadow-inner";
+            }
+        }
+
+        function handleTimeOut() {
+            if (isAnswered) return;
+            isAnswered = true;
+            playWrongSound();
+            const q = questionsData[currentQuestionIndex];
+            disableAllOptions();
+            document.getElementById(`opt-btn-${q.correct}`).classList.add('correct');
+            showFeedback(false, "انتهى الوقت المحدد للسؤال!");
+        }
+
+        // 9. Check Selected Answer
+        function checkAnswer(selectedIndex) {
+            if (isAnswered) return;
+            isAnswered = true;
+            clearInterval(timerInterval);
+
+            const q = questionsData[currentQuestionIndex];
+            const selectedBtn = document.getElementById(`opt-btn-${selectedIndex}`);
+            const correctBtn = document.getElementById(`opt-btn-${q.correct}`);
+
+            disableAllOptions();
+
+            if (selectedIndex === q.correct) {
+                selectedBtn.classList.add('correct');
+                score++;
+                playCorrectSound();
+                showFeedback(true, "إجابة صحيحة وموفقة!");
+            } else {
+                selectedBtn.classList.add('wrong');
+                correctBtn.classList.add('correct');
+                document.getElementById('question-container').classList.add('shake-anim');
+                setTimeout(() => document.getElementById('question-container').classList.remove('shake-anim'), 500);
+                playWrongSound();
+                showFeedback(false, "إجابة غير صحيحة!");
+            }
+        }
+
+        function disableAllOptions() {
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`opt-btn-${i}`);
+                if (btn) btn.disabled = true;
+            }
+        }
+
+        // 10. Show Educational Feedback After Answer
+        function showFeedback(isCorrect, statusTitle) {
+            const q = questionsData[currentQuestionIndex];
+            const fbBox = document.getElementById('feedback-box');
+            const fbStatus = document.getElementById('feedback-status');
+            const fbPoints = document.getElementById('feedback-points');
+            const retryBtn = document.getElementById('retry-q-btn');
+            const nextBtn = document.getElementById('next-q-btn');
+
+            fbBox.classList.remove('hidden', 'bg-emerald-950/90', 'border-emerald-500', 'bg-red-950/90', 'border-red-500');
+
+            if (isCorrect) {
+                fbBox.classList.add('bg-emerald-950/90', 'border-emerald-500');
+                fbStatus.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> <span class="text-emerald-300">${statusTitle}</span>`;
+                fbPoints.textContent = `الرصيد: ${q.prize}`;
+                fbPoints.className = "text-xs font-bold px-3 py-1 rounded-full bg-emerald-800 text-emerald-200";
+                retryBtn.classList.add('hidden');
+            } else {
+                fbBox.classList.add('bg-red-950/90', 'border-red-500');
+                fbStatus.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-400"></i> <span class="text-red-300">${statusTitle}</span>`;
+                fbPoints.textContent = `الإجابة الصحيحة: ${q.options[q.correct]}`;
+                fbPoints.className = "text-xs font-bold px-3 py-1 rounded-full bg-red-900 text-red-200";
+
+                // Allow 1 retry across the game if wrong
+                if (lifelines.retryAvailable) {
+                    retryBtn.classList.remove('hidden');
+                } else {
+                    retryBtn.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('feedback-reason').textContent = q.reason;
+            document.getElementById('feedback-extra').textContent = q.extra;
+
+            if (currentQuestionIndex === questionsData.length - 1) {
+                nextBtn.innerHTML = `<span>عرض النتيجة والشهادة</span> <i class="fa-solid fa-award"></i>`;
+            } else {
+                nextBtn.innerHTML = `<span>السؤال التالي</span> <i class="fa-solid fa-arrow-left"></i>`;
+            }
+        }
+
+        function retryCurrentQuestion() {
+            if (!lifelines.retryAvailable) return;
+            lifelines.retryAvailable = false;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        // 11. Lifelines Functions
+        function markLifelineUsed(btnId) {
+            const btn = document.getElementById(btnId);
+            btn.disabled = true;
+            btn.classList.add('opacity-40', 'line-through', 'cursor-not-allowed');
+        }
+
+        function useFiftyFifty() {
+            if (!lifelines.fiftyFifty || isAnswered) return;
+            lifelines.fiftyFifty = false;
+            markLifelineUsed('life-5050');
+
+            const q = questionsData[currentQuestionIndex];
+            let wrongIndices = [0, 1, 2, 3].filter(i => i !== q.correct);
+            // Shuffle and remove 2 wrong options
+            wrongIndices.sort(() => Math.random() - 0.5);
+            const toHide = wrongIndices.slice(0, 2);
+
+            toHide.forEach(idx => {
+                const btn = document.getElementById(`opt-btn-${idx}`);
+                btn.disabled = true;
+                btn.classList.add('opacity-20', 'pointer-events-none');
+            });
+            playTone(600, 'sine', 0.2);
+        }
+
+        function useHint() {
+            if (!lifelines.hint || isAnswered) return;
+            lifelines.hint = false;
+            markLifelineUsed('life-hint');
+
+            const q = questionsData[currentQuestionIndex];
+            showLifelineMessage('<i class="fa-solid fa-lightbulb text-yellow-400"></i> تلميح تعليمي:', q.hint);
+            playTone(700, 'triangle', 0.25);
+        }
+
+        function useAudience() {
+            if (!lifelines.audience || isAnswered) return;
+            lifelines.audience = false;
+            markLifelineUsed('life-audience');
+
+            const q = questionsData[currentQuestionIndex];
+            const letters = ['أ', 'ب', 'ج', 'د'];
+            let percentages = [0, 0, 0, 0];
+            percentages[q.correct] = Math.floor(Math.random() * 20) + 58; // 58% to 77% for correct
+            let remaining = 100 - percentages[q.correct];
+
+            for (let i = 0; i < 4; i++) {
+                if (i !== q.correct) {
+                    if (i === 3 || (q.correct === 3 && i === 2)) {
+                        percentages[i] = remaining;
+                    } else {
+                        let val = Math.floor(Math.random() * remaining);
+                        percentages[i] = val;
+                        remaining -= val;
+                    }
+                }
+            }
+
+            let barsHtml = `<div class="grid grid-cols-4 gap-2 pt-2 text-center">`;
+            percentages.forEach((pct, idx) => {
+                barsHtml += `
+                    <div class="bg-slate-900 p-2 rounded-lg border border-slate-700">
+                        <div class="text-amber-400 font-black text-xs mb-1">${pct}%</div>
+                        <div class="w-full bg-slate-800 h-14 rounded flex items-end justify-center overflow-hidden">
+                            <div class="bg-emerald-500 w-full transition-all duration-700" style="height: ${pct}%"></div>
+                        </div>
+                        <div class="text-[11px] font-bold text-slate-300 mt-1">خيار (${letters[idx]})</div>
+                    </div>
+                `;
+            });
+            barsHtml += `</div>`;
+
+            showLifelineMessage('<i class="fa-solid fa-users text-sky-400"></i> نتائج تصويت الجمهور:', barsHtml);
+            playTone(650, 'sine', 0.25);
+        }
+
+        function useTeacher() {
+            if (!lifelines.teacher || isAnswered) return;
+            lifelines.teacher = false;
+            markLifelineUsed('life-teacher');
+
+            const q = questionsData[currentQuestionIndex];
+            const letters = ['أ', 'ب', 'ج', 'د'];
+            const msg = `أهلاً بك يا ${studentName}! بناءً على مفاهيم مادة المهارات الإدارية، أنصحك بالتركيز على الخيار <strong>(${letters[q.correct]}): ${q.options[q.correct]}</strong>، فهو الأدق علمياً.`;
+            showLifelineMessage('<i class="fa-solid fa-chalkboard-user text-purple-400"></i> توجيه المعلم:', msg);
+            playTone(750, 'triangle', 0.3);
+        }
+
+        function showLifelineMessage(titleHtml, contentHtml) {
+            const box = document.getElementById('lifeline-box');
+            document.getElementById('lifeline-title').innerHTML = titleHtml;
+            document.getElementById('lifeline-content').innerHTML = contentHtml;
+            box.classList.remove('hidden');
+        }
+
+        // 12. End Screen & Certificate Generation
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const total = questionsData.length;
+            const percent = Math.round((score / total) * 100);
+            const earnedPrize = score > 0 ? questionsData[score - 1].prize : "0 ريال";
+
+            // Determine Rank Badge
+            let badgeName = "مشارك طموح";
+            if (percent === 100) badgeName = "مليونير المعرفة والقيادة";
+            else if (percent >= 75) badgeName = "قائد إداري متميز";
+            else if (percent >= 50) badgeName = "مبادر واعد";
+
+            // Populate Results
+            document.getElementById('res-name').textContent = studentName;
+            document.getElementById('res-score').textContent = `${score} / ${total}`;
+            document.getElementById('res-percent').textContent = `${percent}%`;
+            document.getElementById('res-prize').textContent = earnedPrize;
+
+            // Populate Certificate
+            document.getElementById('cert-student-name').textContent = studentName;
+            document.getElementById('cert-badge-name').textContent = badgeName;
+            document.getElementById('cert-percent').textContent = `${percent}%`;
+
+            if (percent >= 50) {
+                document.getElementById('end-title').textContent = "تهانينا بالفوز والتميز!";
+                playWinFanfare();
+                startFireworks();
+            } else {
+                document.getElementById('end-title').textContent = "محاولة رائعة! واصل التعلم";
+                document.getElementById('end-medal-icon').className = "fa-solid fa-medal text-4xl text-emerald-400";
+            }
+        }
+
+        function restartGame() {
+            stopFireworks();
+            document.getElementById('end-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+
+        // Download Certificate as Standalone HTML File
+        function downloadCertificate() {
+            const certContent = document.getElementById('printable-certificate').outerHTML;
+            const htmlDoc = `
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>شهادة إنجاز - ${studentName}</title>
+                    <script src="https://cdn.tailwindcss.com"><\/script>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Cairo', sans-serif; background: #022c22; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+                        #printable-certificate { max-width: 700px; width: 100%; background: #064e3b; border: 6px double #fbbf24; border-radius: 24px; padding: 40px; text-align: center; }
+                    </style>
+                </head>
+                <body>${certContent}</body>
+                </html>
+            `;
+            const blob = new Blob([htmlDoc], { type: 'text/html;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `شهادة_${studentName.replace(/\s+/g, '_')}.html`;
+            link.click();
+        }
+
+        // 13. Canvas Fireworks Effect on Win
+        let fireworksActive = false;
+        let particles = [];
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height * 0.5);
+            const colors = ['#fbbf24', '#10b981', '#34d399', '#fef08a', '#ffffff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            for (let i = 0; i < 35; i++) {
+                const angle = (Math.PI * 2 * i) / 35;
+                const speed = Math.random() * 4 + 1.5;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    color: color
+                });
+            }
+        }
+
+        function animateFireworks() {
+            if (!fireworksActive) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (Math.random() < 0.06) createFirework();
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.04; // gravity
+                p.alpha -= 0.015;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            requestAnimationFrame(animateFireworks);
+        }
+
+        function startFireworks() {
+            fireworksActive = true;
+            particles = [];
+            createFirework();
+            animateFireworks();
+        }
+
+        function stopFireworks() {
+            fireworksActive = false;
+            particles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>
